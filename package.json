@@ -7,6 +7,6 @@
     "vehicle": "node vehicle_scheduling/scheduler.js",
     "notifications": "node campus_notifications/priority_inbox.js"
   },
-  "author": "",
+  "author": "RA2311003050143",
   "license": "ISC"
 }
