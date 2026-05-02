@@ -1,17 +1,7 @@
-// auth.js
-// Handles getting the Bearer token from the evaluation server.
-// The token is needed to call all protected API endpoints.
-
 const http = require("http");
-
 const BASE_URL = "http://20.207.122.201";
-
-// Credentials returned from the registration step
 const CLIENT_ID = "1005dc0a-04f9-44cb-afb6-815efc8d330b";
 const CLIENT_SECRET = "mgJWVeMYtGZmmnjX";
-
-// These are the registration details used to authenticate
-// (matches the exact fields the /auth endpoint expects)
 const AUTH_PAYLOAD = {
   email: "ss5689@srmist.edu.in",
   name: "Sharbba Sengupta",
@@ -36,14 +26,11 @@ function getToken() {
         "Content-Length": Buffer.byteLength(body),
       },
     };
-
     const req = http.request(options, (res) => {
       let data = "";
-
       res.on("data", (chunk) => {
         data += chunk;
       });
-
       res.on("end", () => {
         try {
           const parsed = JSON.parse(data);
@@ -57,7 +44,6 @@ function getToken() {
         }
       });
     });
-
     req.on("error", (err) => {
       reject(err);
     });
@@ -66,5 +52,4 @@ function getToken() {
     req.end();
   });
 }
-
 module.exports = { getToken, CLIENT_ID, CLIENT_SECRET };
