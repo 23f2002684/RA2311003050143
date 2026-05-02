@@ -6,21 +6,25 @@ const http = require("http");
 
 const BASE_URL = "http://20.207.122.201";
 
-// Credentials from registration (do not share publicly)
+// Credentials returned from the registration step
 const CLIENT_ID = "1005dc0a-04f9-44cb-afb6-815efc8d330b";
 const CLIENT_SECRET = "mgJWVeMYtGZmmnjX";
+
+// These are the registration details used to authenticate
+// (matches the exact fields the /auth endpoint expects)
+const AUTH_PAYLOAD = {
+  email: "ss5689@srmist.edu.in",
+  name: "Sharbba Sengupta",
+  rollNo: "RA2311003050143",
+  accessCode: "QkbpxH",
+  clientID: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
+};
 
 // Calls the auth endpoint and returns the Bearer token
 function getToken() {
   return new Promise((resolve, reject) => {
-    const body = JSON.stringify({
-      email: "ss5689@srmist.edu.in",
-      name: "Sharbba Sengupta",
-      rollNo: "RA2311003050143",
-      accessCode: "QkbpxH",
-      clientID: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-    });
+    const body = JSON.stringify(AUTH_PAYLOAD);
 
     const options = {
       hostname: "20.207.122.201",

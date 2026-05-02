@@ -1,14 +1,3 @@
-// vehicle_scheduling/scheduler.js
-// Main script for the Vehicle Maintenance Scheduler task.
-//
-// What this does:
-// 1. Gets the auth token
-// 2. Fetches all depots (each depot has a mechanic-hour budget)
-// 3. Fetches all vehicles/tasks (each has a duration and an impact score)
-// 4. For each depot, figures out which tasks to schedule to maximize total impact
-//    without going over the mechanic-hour budget (classic knapsack problem)
-// 5. Prints out the selected task IDs for each depot
-
 const http = require("http");
 const logger = require("../logger");
 const { getToken } = require("../auth");
@@ -51,13 +40,6 @@ function fetchFromServer(path, token) {
     req.end();
   });
 }
-
-// This is the knapsack solver.
-// Given a list of tasks (each with duration and impact) and a max budget,
-// it picks the best subset of tasks to maximize total impact.
-//
-// We use a simple DP table approach - straightforward and easy to understand.
-// dp[i][w] = best impact we can get using first i tasks with w hours available
 function solveKnapsack(tasks, maxHours) {
   const n = tasks.length;
 
@@ -88,7 +70,6 @@ function solveKnapsack(tasks, maxHours) {
     }
   }
 
-  // Now trace back through the table to find which tasks were actually selected
   let selected = [];
   let remainingHours = maxHours;
 
