@@ -1,0 +1,12 @@
+{
+  "name": "affordmed-evaluation",
+  "version": "1.0.0",
+  "description": "AffordMed evaluation submission - Vehicle Scheduling and Campus Notifications microservices",
+  "main": "index.js",
+  "scripts": {
+    "vehicle": "node vehicle_scheduling/scheduler.js",
+    "notifications": "node campus_notifications/priority_inbox.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
