@@ -1,30 +1,12 @@
-// campus_notifications/priority_inbox.js
-// Stage 6 - Priority Inbox
-//
-// This fetches all notifications from the server and then picks the top N
-// most important unread ones. Priority is based on:
-//   - Type weight: Placement (3) > Result (2) > Event (1)
-//   - Recency: more recent notifications score higher
-//
-// We combine both into a single score and sort by that.
-
 const http = require("http");
 const logger = require("../logger");
 const { getToken } = require("../auth");
-
-// How many notifications to show in the priority inbox
-// Can be 10, 15, 20 or any number the user wants
 const TOP_N = 10;
-
-// Weight for each notification type
-// Placement is most important, then results, then events
 const TYPE_WEIGHTS = {
   Placement: 3,
   Result: 2,
   Event: 1,
 };
-
-// Fetch notifications from the evaluation server
 function fetchNotifications(token) {
   return new Promise((resolve, reject) => {
     const options = {
@@ -61,28 +43,18 @@ function fetchNotifications(token) {
     req.end();
   });
 }
-
-// Calculate a priority score for a notification.
 // We use a combination of the type weight and how recent it is.
-//
 // For recency, we convert the timestamp to a Unix timestamp (milliseconds)
 // and then normalize it. More recent = higher number = higher score.
 function calculateScore(notification, oldestTime, newestTime) {
   const typeWeight = TYPE_WEIGHTS[notification.Type] || 1;
-
-  // Convert timestamp to ms
   const notifTime = new Date(notification.Timestamp).getTime();
-
-  // Normalize recency between 0 and 1
-  // If all timestamps are the same, recencyScore is 1
+  // Normalize recency between 0 and 1  
   let recencyScore = 1;
   if (newestTime !== oldestTime) {
     recencyScore = (notifTime - oldestTime) / (newestTime - oldestTime);
   }
-
-  // Combine weight and recency
-  // We weight the type more heavily (multiplied by 10) so type is the dominant factor
-  // but recency acts as a tiebreaker within the same type
+'''We weight the type more heavily (multiplied by 10) so type is the dominant factorbut recency acts as a tiebreaker within the same type'''
   const score = typeWeight * 10 + recencyScore;
 
   return score;
@@ -119,8 +91,6 @@ async function main() {
     console.log("No notifications found.");
     return;
   }
-
-  // Find the oldest and newest timestamps so we can normalize recency
   let oldestTime = Infinity;
   let newestTime = -Infinity;
 
@@ -136,11 +106,7 @@ async function main() {
   for (let i = 0; i < notifications.length; i++) {
     notifications[i].score = calculateScore(notifications[i], oldestTime, newestTime);
   }
-
-  // Sort by score descending (highest priority first)
   notifications.sort((a, b) => b.score - a.score);
-
-  // Take only the top N
   const topNotifications = notifications.slice(0, TOP_N);
 
   logger.info(
@@ -150,7 +116,6 @@ async function main() {
 
   // Print the priority inbox
   console.log("\n=== Priority Inbox (Top " + TOP_N + " Notifications) ===\n");
-
   for (let i = 0; i < topNotifications.length; i++) {
     const n = topNotifications[i];
     console.log("#" + (i + 1) + " [" + n.Type + "] " + n.Message);
@@ -159,8 +124,6 @@ async function main() {
     console.log("    Priority Score: " + n.score.toFixed(4));
     console.log("");
   }
-
   logger.info("campus_notifications", "Priority inbox displayed successfully");
 }
-
 main();
