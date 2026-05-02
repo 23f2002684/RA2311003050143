@@ -34,11 +34,6 @@ Authorization: Bearer <token>
 
 **Query Parameters:**
 | Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| type | string | No | Filter by type: `Placement`, `Result`, `Event` |
-| isRead | boolean | No | Filter by read status |
-| page | integer | No | Page number (default: 1) |
-| limit | integer | No | Items per page (default: 20) |
 
 **Response (200 OK):**
 ```json
@@ -197,7 +192,7 @@ The client can keep the socket open and the server pushes events in real time wh
 
 **Recommended DB: PostgreSQL (relational)**
 
-I'd go with a relational database like PostgreSQL because:
+I'll go with a relational database like PostgreSQL because:
 - Student and notification data is structured and well-defined
 - We need joins (e.g., fetch all unread notifications for a student)
 - We need aggregations (e.g., count unread, find by type)
